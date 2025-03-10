@@ -15,6 +15,8 @@ class Passenger:
         self.desired_departure_time = desired_departure_time
         self.ticket_purchased = ticket_purchased
         self.flight_number = flight_number
+    def __add__(self, passengers):
+        passengers.append(self)
 
 def load_data(filename, class_type):
     try:
@@ -50,7 +52,7 @@ def add_passenger(passengers):
     departure_station = input("Введите станцию отправления: ")
     arrival_station = input("Введите станцию прибытия: ")
     desired_departure_time = input("Введите желаемое время отправления (HH:MM): ")
-    passengers.append(Passenger(last_name, first_name, departure_station, arrival_station, desired_departure_time))
+    Passenger(last_name, first_name, departure_station, arrival_station, desired_departure_time)+passengers
     print("Пассажир добавлен.")
 
 def add_flight(tickets):
