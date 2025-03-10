@@ -28,7 +28,6 @@ def load_data(filename, class_type):
                     ticket_purchased = parts[5] != 'No'
                     flight_number = parts[5] if ticket_purchased else None
                     data.append(Passenger(parts[0], parts[1], parts[2], parts[3], parts[4], ticket_purchased, flight_number))
-            # Сортировка рейсов по времени отправления
             if class_type == Ticket:
                 data.sort(key=lambda x: x.departure_time)
             return data
@@ -61,12 +60,10 @@ def add_flight(tickets):
     departure_time = input("Введите время отправления (HH:MM): ")
     available_seats = int(input("Введите количество свободных билетов: "))
     tickets.append(Ticket(flight_number, departure_station, arrival_station, departure_time, available_seats))
-    # Сортировка по времени отправления
     tickets.sort(key=lambda x: x.departure_time)
     print("Рейс добавлен.")
 
 def compare_time(time1, time2):
-    # Сравнивает два времени в формате "HH:MM"
     h1, m1 = map(int, time1.split(':'))
     h2, m2 = map(int, time2.split(':'))
     return (h1 * 60 + m1) <= (h2 * 60 + m2)
@@ -96,10 +93,8 @@ def delete_flight(tickets, passengers, flight_number):
         print(f"Рейс {flight_number} не найден.")
         return
 
-    # Удаляем рейс
     tickets[:] = [t for t in tickets if t.flight_number != flight_number]
 
-    # Сбрасываем билеты у пассажиров, которые были на этом рейсе
     for passenger in passengers:
         if passenger.flight_number == flight_number:
             passenger.ticket_purchased = False
@@ -108,37 +103,35 @@ def delete_flight(tickets, passengers, flight_number):
     print(f"Рейс {flight_number} удален.")
 
 def print_table(data, headers):
-    # Определяем ширину колонок
     col_widths = [len(header) for header in headers]
     for row in data:
         for i, item in enumerate(row):
             if len(str(item)) > col_widths[i]:
                 col_widths[i] = len(str(item))
 
-    # Вывод заголовков
+
     header_row = ""
     for i, header in enumerate(headers):
         header_row += f"{header:<{col_widths[i]}}  "
     print(header_row)
 
-    # Вывод разделителя
+
     separator = ""
     for width in col_widths:
         separator += "-" * width + "  "
     print(separator)
 
-    # Вывод данных
+
     for row in data:
         row_str = ""
         for i, item in enumerate(row):
             row_str += f"{str(item):<{col_widths[i]}}  "
         print(row_str)
 
-# Загрузка данных
+
 tickets = load_data('tickets.txt', Ticket)
 passengers = load_data('passengers.txt', Passenger)
 
-# Основной цикл программы
 while True:
     print("\n1 - Вывести список всех поездов\n2 - Вывести список всех пассажиров\n3 - Добавить пассажира\n4 - Добавить поезд\n5 - Вывести пассажиров рейса\n6 - Подобрать билеты всем пассажирам\n7 - Удалить рейс\n0 - Завершить работу")
     choice = input("Выберите действие: ")
